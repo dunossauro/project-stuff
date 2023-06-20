@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "project-stuff"
+version = "0.0.1"
+description = "Get PyPI stuffs from package"
+authors = ["dunossauro <mendesxeduardo@gmail.com>"]
+readme = "README.md"
+license = "GPL-3.0-or-later"
+packages = [{include = "cli"}]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.urls]
+"Código" = "https://github.com/dunossauro/project-stuff"
+"Issues" = "https://github.com/dunosauro/project-stuff/issues"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.24.1"
+typer = "^0.9.0"
+rich = "^13.4.1"
+packaging = "^23.1"
+
+[tool.poetry.scripts]
+pstuff = "cli.app:app"
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.11.0"
+ruff = "^0.0.272"
+isort = "^5.12.0"
+blue = "^0.9.1"
+
+[tool.taskipy.tasks]
+lint = "ruff cli/ && blue --check cli/ && isort --check cli/"
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
