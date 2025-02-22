@@ -45,7 +45,7 @@ def first_release(releases: dict[str, Any]) -> dict[str, str]:
             'relase': release,
             'date': format_date(releases[release][0]['upload_time']),
         }
-    except KeyError:
+    except (KeyError, IndexError):
         return {'release': release, 'data': ''}
 
 

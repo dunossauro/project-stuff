@@ -20,4 +20,4 @@ pstuff textual
 
 ## install
 
-`pipx install https://github.com/dunossauro/project-stuff.git`
+`pipx install git+https://github.com/dunossauro/project-stuff.git`
