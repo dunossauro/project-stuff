@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "project-stuff"
-version = "0.0.1"
+version = "0.0.2"
 description = "Get PyPI stuffs from package"
 authors = ["dunossauro <mendesxeduardo@gmail.com>"]
 readme = "README.md"
@@ -23,7 +23,7 @@ rich = "^13.4.1"
 packaging = "^23.1"
 
 [tool.poetry.scripts]
-pstuff = "cli.app:app"
+pstuff = "cli.__main__:app"
 
 [tool.poetry.group.dev.dependencies]
 taskipy = "^1.11.0"

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from httpx import get
@@ -10,8 +11,18 @@ app = Typer()
 BASE_URL = 'https://pypi.org/pypi/{package}/json'
 
 
-def license_metadata(classifiers: list[str]) -> str:
-    for classifier in classifiers:
+def format_date(date: str) -> str:
+    return datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y')
+
+
+def license_metadata(info: dict[str, Any]) -> str:
+    if (license := info.get('license')) and license:
+        return license
+
+    if (license := info.get('license_expression')) and license:
+        return license
+
+    for classifier in info['classifiers']:
         if 'License' in classifier:
             return classifier
     return ''
@@ -20,7 +31,10 @@ def license_metadata(classifiers: list[str]) -> str:
 def last_release(releases: dict[str, Any]) -> dict[str, str]:
     release = sorted(releases, key=Version)[-1]
 
-    return {'relase': release, 'date': releases[release][0]['upload_time']}
+    return {
+        'relase': release,
+        'date': format_date(releases[release][0]['upload_time']),
+    }
 
 
 def first_release(releases: dict[str, Any]) -> dict[str, str]:
@@ -28,8 +42,8 @@ def first_release(releases: dict[str, Any]) -> dict[str, str]:
 
     try:
         return {
-            'release': release,
-            'date': releases[release][0]['upload_time'],
+            'relase': release,
+            'date': format_date(releases[release][0]['upload_time']),
         }
     except KeyError:
         return {'release': release, 'data': ''}
@@ -41,17 +55,21 @@ def package_data(package: str):
 
     data = response.json()
 
-    license = license_metadata(data['info']['classifiers'])
+    author = data['info']['author']
+    home_page = data['info']['home_page']
+    license = license_metadata(data['info'])
     l_release = last_release(data['releases'])
     f_release = first_release(data['releases'])
     url = data['info']['package_url'] + '#history'
 
     print(
         {
+            'author': author,
+            'homepage': home_page,
             'package': package,
             'url': url,
-            'licença': license,
-            'primeira_release': f_release,
-            'release_atual': l_release,
+            'license': license,
+            'first release': f_release,
+            'last release': l_release,
         }
     )
